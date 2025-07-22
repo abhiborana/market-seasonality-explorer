@@ -1,0 +1,77 @@
+Assignment Title: Market Seasonality Explorer
+
+Objective
+Create a React application that displays an interactive calendar for visualizing historical volatility, liquidity, and performance data across different time periods (day/week/month) for financial instruments.
+
+Where to Start
+Create a React project using Create React App, Vite, or Next.js
+Use any UI component library (e.g., Material-UI, Ant Design, Chakra UI, or similar) for creating the required components
+Implement real-time orderbook data integration using any open API that provides cryptocurrency orderbook data (e.g., Binance API, OKX API, or similar). Ensure the service is unpaid/free for demo purposes.
+Use any charting library (e.g., Recharts, Chart.js, D3.js, or similar) for creating the required visualizations
+
+Functional Requirements
+
+1. Interactive Calendar Component
+Create a custom calendar component that can display data in daily, weekly, and monthly views
+Implement smooth transitions between different time periods
+Allow users to navigate between different months/years
+Display today's date with visual indicators
+Support keyboard navigation (arrow keys, enter, escape)
+
+2. Data Visualization Layers
+Volatility Heatmap: Color-code calendar cells based on volatility levels
+  Low volatility: Green shades
+  Medium volatility: Yellow/Orange shades
+  High volatility: Red shades
+Liquidity Indicators: Show trading volume and liquidity metrics
+ Use different visual patterns (stripes, dots, gradients)
+ Display volume bars or circles within calendar cells
+Performance Metrics: Visualize price changes and returns
+Positive performance: Upward arrows or green indicators
+Negative performance: Downward arrows or red indicators
+Neutral: Gray or no indicators
+
+3. Multi-Timeframe Support
+Daily View: Show detailed metrics for each day
+Intraday volatility ranges
+Trading volume and liquidity
+Price change percentages
+Weekly View: Aggregate daily data into weekly summaries
+Weekly average volatility
+Total weekly volume
+ Weekly performance summary
+Monthly View: Provide monthly overview with key metrics
+Monthly volatility trends
+Monthly liquidity patterns
+Monthly performance highlights
+
+4. Interactive Features
+Hover Effects: Display detailed tooltips with specific metrics when hovering over calendar cells
+Click Interactions: Allow users to click on dates to see detailed breakdowns
+Selection Mode: Enable date range selection for custom analysis periods
+Filter Controls: Add filters for different financial instruments, time periods, or metric types
+Zoom Functionality: Implement zoom-in/zoom-out for detailed analysis
+
+5. Data Dashboard Panel
+Create a side panel or modal that displays detailed information when a date/period is selected
+Show comprehensive metrics including:
+Opening, closing, high, low prices
+Volume and liquidity metrics
+Volatility calculations (standard deviation, VIX-like metrics)
+Performance comparisons to benchmarks
+Technical indicators (moving averages, RSI, etc.)
+
+6. Responsive Design
+Ensure the calendar works seamlessly across all device sizes
+Implement touch-friendly interactions for mobile devices
+Optimize layout for different screen orientations
+Maintain readability and usability on small screens
+
+Bonus Features
+Export Functionality: Allow users to export calendar data as PDF, CSV, or image
+Custom Color Schemes: Implement multiple color themes (default, high contrast, colorblind-friendly)
+Data Comparison: Enable side-by-side comparison of different time periods
+Alert System: Set up alerts for specific volatility or performance thresholds
+Historical Patterns: Highlight recurring patterns or anomalies
+Integration Ready: Prepare the component for real API integration
+Animation Effects: Add smooth animations for data transitions and interactions

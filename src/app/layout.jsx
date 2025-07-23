@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={cn("antialiased h-dvh w-dvw bg-accent md:p-4", geist.className)}
+        className={cn("antialiased h-dvh w-dvw bg-accent", geist.className)}
       >
         {children}
       </body>

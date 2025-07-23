@@ -1,27 +1,53 @@
 "use client";
 
 import Calendar from "@/components/calendar";
+import { DataDashboard } from "@/components/dataDashboard";
 import { Filters } from "@/components/filters";
 import OrderBook from "@/components/orderbook";
+import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 
 export default function Home() {
   const [instrument, setInstrument] = useState("BTCUSDT");
   const [metric, setMetric] = useState("volatility");
+  const [dashboardOpen, setDashboardOpen] = useState(false);
+  const [dashboardData, setDashboardData] = useState(null);
 
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Market Seasonality Explorer</h1>
-      <Filters
-        instrument={instrument}
-        setInstrument={setInstrument}
-        metric={metric}
-        setMetric={setMetric}
-      />
-      <div className="mt-6">
-        <Calendar />
+    <dic className="max-w-7xl container mx-auto px-4 py-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Market Seasonality Explorer
+      </h1>
+      <Card className="mb-6">
+        <CardContent>
+          <Filters
+            instrument={instrument}
+            setInstrument={setInstrument}
+            metric={metric}
+            setMetric={setMetric}
+          />
+        </CardContent>
+      </Card>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="md:col-span-2">
+          <Calendar
+            instrument={instrument}
+            metric={metric}
+            onDateSelect={(data) => {
+              setDashboardData(data);
+              setDashboardOpen(true);
+            }}
+          />
+        </div>
+        <div className="xl:col-span-1 col-span-2">
+          <OrderBook instrument={instrument} />
+        </div>
       </div>
-      <OrderBook />
-    </main>
+      <DataDashboard
+        open={dashboardOpen}
+        onClose={() => setDashboardOpen(false)}
+        data={dashboardData}
+      />
+    </dic>
   );
 }

@@ -26,6 +26,9 @@ import {
   startOfWeek,
   subMonths,
 } from "date-fns";
+import html2canvas from "html2canvas-pro";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -53,6 +56,90 @@ interface CalendarProps {
   instrument: string;
   metric: string;
   onDateSelect?: (data: DayMetrics) => void;
+}
+
+function exportToCSV(
+  data: Record<string, DayMetrics>,
+  filename = "calendar.csv"
+) {
+  const headers = [
+    "Date",
+    "Open",
+    "Close",
+    "High",
+    "Low",
+    "Volume",
+    "Volatility",
+    "Performance",
+  ];
+  const rows = Object.values(data).map((d) =>
+    [
+      d.date,
+      d.open,
+      d.close,
+      d.high,
+      d.low,
+      d.volume,
+      d.volatility,
+      d.performance,
+    ].join(",")
+  );
+  const csvContent = [headers.join(","), ...rows].join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function exportToPDF(
+  data: Record<string, DayMetrics>,
+  filename = "calendar.pdf"
+) {
+  const autoTable = (await import("jspdf-autotable")).default;
+  const doc = new jsPDF();
+  const headers = [
+    [
+      "Date",
+      "Open",
+      "Close",
+      "High",
+      "Low",
+      "Volume",
+      "Volatility",
+      "Performance",
+    ],
+  ];
+  const rows = Object.values(data).map((d) => [
+    d.date,
+    d.open,
+    d.close,
+    d.high,
+    d.low,
+    d.volume,
+    d.volatility,
+    d.performance,
+  ]);
+  autoTable(doc, {
+    head: headers,
+    body: rows,
+  });
+  doc.save(filename);
+}
+
+function exportToImage(
+  ref: React.RefObject<HTMLDivElement>,
+  filename = "calendar.png"
+) {
+  if (!ref.current) return;
+  html2canvas(ref.current).then((canvas) => {
+    const link = document.createElement("a");
+    link.download = filename;
+    link.href = canvas.toDataURL();
+    link.click();
+  });
 }
 
 // --- Atomized Tooltip ---
@@ -342,6 +429,20 @@ const Calendar: React.FC<CalendarProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedDate, days, data, onDateSelect]);
 
+  // If view is day and selectedDate is not in the current data, pick the first available date from data
+  useEffect(() => {
+    if (view === "day") {
+      const availableDates = Object.keys(data);
+      if (availableDates.length > 0) {
+        const firstAvailable = availableDates[0];
+        if (format(selectedDate, "yyyy-MM-dd") !== firstAvailable) {
+          setSelectedDate(new Date(firstAvailable));
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, data]);
+
   return (
     <div className="p-4 w-full">
       <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4 bg-white/80 rounded-xl shadow px-4 py-3">
@@ -378,7 +479,7 @@ const Calendar: React.FC<CalendarProps> = ({
             <span className="md:hidden">&#8594;</span>
           </Button>
           <Select value={view} onValueChange={(v) => setView(v as ViewMode)}>
-            <SelectTrigger className="w-28 border rounded bg-gray-50 focus:ring-2 focus:ring-indigo-400">
+            <SelectTrigger className="w-28">
               {view.charAt(0).toUpperCase() + view.slice(1)}
             </SelectTrigger>
             <SelectContent className="w-28">
@@ -393,6 +494,30 @@ const Calendar: React.FC<CalendarProps> = ({
               </SelectItem>
             </SelectContent>
           </Select>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => exportToCSV(data)}
+            className="rounded-full"
+          >
+            Export CSV
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => exportToPDF(data)}
+            className="rounded-full"
+          >
+            Export PDF
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => exportToImage(gridRef)}
+            className="rounded-full"
+          >
+            Export Image
+          </Button>
         </div>
       </div>
 
@@ -463,7 +588,71 @@ const Calendar: React.FC<CalendarProps> = ({
             const key = format(selectedDate, "yyyy-MM-dd");
             const d = data[key];
             if (!d) return <p>No data available for this day.</p>;
-            return <MetricsTooltip day={selectedDate} d={d} />;
+            // Render the content of MetricsTooltip directly, not TooltipContent
+            return (
+              <div className="max-w-xs bg-white text-gray-900 shadow-lg rounded-xl p-4 border border-gray-200">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-bold text-indigo-700 text-base">
+                      {format(selectedDate, "PPP")}
+                    </span>
+                    {d.performance > 0 ? (
+                      <ArrowUpRight className="w-5 h-5 text-green-500" />
+                    ) : d.performance < 0 ? (
+                      <ArrowDownRight className="w-5 h-5 text-red-500" />
+                    ) : (
+                      <BarChart2 className="w-5 h-5 text-gray-400" />
+                    )}
+                    <span
+                      className={cn(
+                        "font-semibold",
+                        d.performance > 0
+                          ? "text-green-600"
+                          : d.performance < 0
+                          ? "text-red-600"
+                          : "text-gray-600"
+                      )}
+                    >
+                      {d.performance.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="w-4 h-4 text-blue-500" />
+                      <span>Open:</span>
+                      <span className="font-mono">{d.open.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <TrendingDown className="w-4 h-4 text-purple-500" />
+                      <span>Close:</span>
+                      <span className="font-mono">{d.close.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <ArrowUpRight className="w-4 h-4 text-green-500" />
+                      <span>High:</span>
+                      <span className="font-mono">{d.high.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <ArrowDownRight className="w-4 h-4 text-red-500" />
+                      <span>Low:</span>
+                      <span className="font-mono">{d.low.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center gap-1 col-span-2">
+                      <BarChart2 className="w-4 h-4 text-yellow-500" />
+                      <span>Volatility:</span>
+                      <span className="font-mono">
+                        {d.volatility.toFixed(2)}%
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 col-span-2">
+                      <CircleDollarSign className="w-4 h-4 text-blue-700" />
+                      <span>Volume:</span>
+                      <span className="font-mono">{d.volume.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
           })()}
         </div>
       )}

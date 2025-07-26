@@ -38,6 +38,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { defaultStyles, FileIcon } from "react-file-icon";
 
 type ViewMode = "day" | "week" | "month";
 
@@ -494,30 +495,45 @@ const Calendar: React.FC<CalendarProps> = ({
               </SelectItem>
             </SelectContent>
           </Select>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => exportToCSV(data)}
-            className="rounded-full"
-          >
-            Export CSV
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => exportToPDF(data)}
-            className="rounded-full"
-          >
-            Export PDF
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => exportToImage(gridRef)}
-            className="rounded-full"
-          >
-            Export Image
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => exportToCSV(data)}
+                className="rounded-full [&_svg:not([class*='size-'])]:size-5"
+              >
+                <FileIcon extension="csv" {...defaultStyles.xlsx} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className={""}>Export data as CSV</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => exportToPDF(data)}
+                className="rounded-full [&_svg:not([class*='size-'])]:size-5"
+              >
+                <FileIcon extension="pdf" {...defaultStyles.pdf} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className={""}>Export data as PDF</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => exportToImage(gridRef)}
+                className="rounded-full [&_svg:not([class*='size-'])]:size-5"
+              >
+                <FileIcon extension="jpg" {...defaultStyles.jpg} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className={""}>Export data as image</TooltipContent>
+          </Tooltip>
         </div>
       </div>
 

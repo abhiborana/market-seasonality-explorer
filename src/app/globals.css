@@ -112,10 +112,50 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Default theme (already present) */
+:root {
+  --color-bg-main: #fff;
+  --color-bg-cell: #f8fafc;
+  --color-text-main: #222;
+  --color-vol-low: #bbf7d0;
+  --color-vol-med: #fde68a;
+  --color-vol-high: #fecaca;
+  --color-perf-pos: #22c55e;
+  --color-perf-neg: #ef4444;
+  --color-perf-neutral: #64748b;
+}
+
+/* High Contrast theme */
+.theme-high-contrast {
+  --color-bg-main: #000;
+  --color-bg-cell: #222;
+  --color-text-main: #fff;
+  --color-vol-low: #00ff00;
+  --color-vol-med: #ffff00;
+  --color-vol-high: #ff0000;
+  --color-perf-pos: #00ff00;
+  --color-perf-neg: #ff0000;
+  --color-perf-neutral: #fff;
+}
+
+/* Colorblind-friendly theme */
+.theme-colorblind {
+  --color-bg-main: #fff;
+  --color-bg-cell: #e0e7ff;
+  --color-text-main: #222;
+  --color-vol-low: #a6cee3;
+  --color-vol-med: #b2df8a;
+  --color-vol-high: #fb9a99;
+  --color-perf-pos: #1f78b4;
+  --color-perf-neg: #e31a1c;
+  --color-perf-neutral: #6a3d9a;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

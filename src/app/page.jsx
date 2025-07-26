@@ -15,10 +15,12 @@ export default function Home() {
 
   return (
     <dic className="max-w-7xl container mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        Market Seasonality Explorer
-      </h1>
-      <Card className="mb-6">
+      <div className="flex items-center gap-2 justify-between px-4">
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          Market Seasonality Explorer
+        </h1>
+      </div>
+      <Card className="mb-6 mx-4">
         <CardContent>
           <Filters
             instrument={instrument}
@@ -28,7 +30,7 @@ export default function Home() {
           />
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 w-full">
         <div className="md:col-span-2">
           <Calendar
             instrument={instrument}

@@ -1,8 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# GoQuant: Market Seasonality Explorer
 
-## Getting Started
+GoQuant is a modern, interactive web application for exploring market seasonality, volatility, and liquidity patterns across various instruments and timeframes. It features a responsive calendar heatmap, advanced data dashboards, orderbook visualization, export tools, and accessibility-focused UI with multiple color themes.
 
-First, run the development server:
+---
+
+## 🚀 Getting Started
+
+### 1. **Install dependencies**
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+### 2. **Run the development server**
 
 ```bash
 npm run dev
@@ -10,27 +24,120 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🗂️ Project Structure
 
-## Learn More
+```
+src/
+  app/
+    layout.jsx         # Root layout, font, and theme setup
+    page.jsx           # Main page, state, and composition
+    globals.css        # Tailwind, theme, and global styles
+  components/
+    calendar.tsx       # Calendar heatmap & period selector
+    dataDashboard.tsx  # Drawer/modal for detailed day/period metrics
+    filters.tsx        # Instrument & metric selectors
+    orderbook.tsx      # Orderbook visualization
+    ThemeSwitcher.tsx  # Theme switcher (default, high contrast, colorblind)
+    ui/                # Reusable UI primitives (button, card, chart, etc.)
+  lib/
+    binance.ts         # Binance API helpers
+    dataGenerator.ts   # Data simulation/generation
+    utils.js           # Utility functions
+  store/
+    index.js           # Zustand/Redux store
+    reducer.js         # Store reducer
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🖥️ Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Calendar Heatmap:**  
+  Visualize volatility, volume, and performance for each day, week, or month.  
+  Keyboard navigation and responsive design.
 
-## Deploy on Vercel
+- **Data Dashboard:**  
+  Side panel/modal with detailed OHLCV, volatility, technical indicators, and benchmark comparisons.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Orderbook Visualization:**  
+  Modern, production-grade orderbook with depth bars and live updates.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Filters:**  
+  Select instrument and metric for focused analysis.
+
+- **Export Tools:**  
+  Export calendar data as CSV, PDF, or image (with html2canvas-pro).
+
+- **Accessibility:**  
+  Keyboard navigation, focus rings, and color contrast options.
+
+- **Animation Effects:**  
+  Smooth transitions for data, drawers, and tooltips.
+
+---
+
+## 🧩 Bonus Features
+
+- **Historical Patterns:**  
+  Highlight recurring patterns or anomalies in the calendar.
+
+- **Integration Ready:**  
+  Easily connect to real APIs (Binance, etc.) via `lib/binance.ts`.
+
+---
+
+## 📦 Export Functionality
+
+- **CSV:**  
+  Exports all visible calendar data.
+- **PDF:**  
+  Uses jsPDF + autotable for tabular export.
+- **Image:**  
+  Uses html2canvas-pro (with oklch patch) for screenshotting the calendar grid.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Next.js** (App Router)
+- **React 19**
+- **Tailwind CSS** (with custom themes)
+- **shadcn/ui** (for UI primitives)
+- **Recharts** (for charts)
+- **jsPDF & autotable** (PDF export)
+- **html2canvas-pro** (image export)
+- **Radix UI** (for accessible popovers, tooltips, drawers)
+
+---
+
+## 🧑‍💻 Development
+
+- All UI is mobile-first and responsive.
+- All exports are available from the calendar header.
+
+---
+
+## 📄 License
+
+MIT
+
+---
+
+## 🙏 Credits
+
+- [Next.js](https://nextjs.org)
+- [shadcn/ui](https://ui.shadcn.com)
+- [Recharts](https://recharts.org)
+- [jsPDF](https://github.com/parallax/jsPDF)
+- [html2canvas-pro](https://github.com/niklasvh/html2canvas)
+- [Radix UI](https://www.radix-ui.com/)
+
+---
+
+For questions or contributions, open an issue or PR!

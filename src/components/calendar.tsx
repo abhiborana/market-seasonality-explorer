@@ -324,8 +324,8 @@ const Calendar: React.FC<CalendarProps> = ({
       const interval = "1d";
       const startTime = start.getTime();
       const endTime = end.getTime();
-      const url = `https://api.binance.com/api/v3/klines?symbol=${instrument}&interval=${interval}&startTime=${startTime}&endTime=${endTime}`;
-      const res = await fetch(url);
+      const url = `klines?symbol=${instrument}&interval=${interval}&startTime=${startTime}&endTime=${endTime}`;
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BINANCE_API}/${url}`);
       const json = await res.json();
 
       const metrics: Record<string, DayMetrics> = {};
